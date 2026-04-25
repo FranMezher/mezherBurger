@@ -78,6 +78,48 @@
 <body class="bg-brand-black text-brand-cream font-body antialiased">
 
   <!-- ═══════════════════════════════════════
+       CART OVERLAY + DRAWER
+  ════════════════════════════════════════ -->
+  <div id="cart-overlay" onclick="closeCart()"
+       class="fixed inset-0 bg-black/60 z-40 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <aside id="cart-drawer"
+         class="fixed top-0 right-0 h-full w-full max-w-sm bg-brand-gray z-50 translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between px-6 py-5 border-b border-white/10">
+      <div>
+        <p class="font-display text-2xl tracking-widest text-brand-gold">TU PEDIDO</p>
+        <p class="text-brand-cream/40 text-xs mt-0.5">mezherBurgers</p>
+      </div>
+      <button onclick="closeCart()" class="text-brand-cream/40 hover:text-brand-cream transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Items -->
+    <div class="flex-1 overflow-y-auto px-6">
+      <p id="cart-empty" class="text-brand-cream/30 text-sm text-center mt-16">Tu carrito está vacío.<br/>¡Agregá alguna burger!</p>
+      <div id="cart-items"></div>
+    </div>
+
+    <!-- Footer -->
+    <div id="cart-footer" class="hidden px-6 py-6 border-t border-white/10 space-y-4">
+      <div class="flex justify-between items-center">
+        <span class="text-brand-cream/60 font-medium">Total</span>
+        <span id="cart-total" class="font-display text-3xl text-brand-gold">$0</span>
+      </div>
+      <button id="checkout-btn" onclick="checkout()"
+        class="w-full bg-brand-gold text-brand-black font-semibold text-lg py-4 rounded-full hover:bg-yellow-400 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+        Pagar ahora →
+      </button>
+      <p class="text-brand-cream/30 text-xs text-center">Serás redirigido a MercadoPago</p>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════════════════════
        NAV
   ════════════════════════════════════════ -->
   <nav class="fixed top-0 w-full z-50 bg-brand-black/90 backdrop-blur-sm border-b border-white/5">
@@ -87,6 +129,13 @@
         <a href="#filosofia" class="hover:text-brand-gold transition-colors">Filosofía</a>
         <a href="#menu" class="hover:text-brand-gold transition-colors">Menú</a>
         <a href="#ubicacion" class="hover:text-brand-gold transition-colors">Ubicación</a>
+        <!-- Carrito -->
+        <button onclick="openCart()" class="relative flex items-center gap-2 hover:text-brand-gold transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-9H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+          <span id="cart-badge" class="hidden absolute -top-2 -right-2 bg-brand-gold text-brand-black text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center transition-transform duration-200">0</span>
+        </button>
         <a href="#pedido" class="bg-brand-gold text-brand-black px-5 py-2 rounded-full font-semibold hover:bg-yellow-400 transition-colors">Hacer Pedido</a>
       </div>
       <!-- Mobile hamburger -->
@@ -232,7 +281,10 @@
             </p>
             <div class="flex items-center justify-between">
               <span class="font-display text-3xl text-brand-gold">$2.800</span>
-              <span class="text-xs text-brand-cream/40 border border-white/10 px-3 py-1 rounded-full">Simple $1.800</span>
+              <button onclick="addToCart('og-smash')"
+                class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">
+                + Agregar
+              </button>
             </div>
           </div>
         </div>
@@ -251,7 +303,10 @@
             </p>
             <div class="flex items-center justify-between">
               <span class="font-display text-3xl text-brand-gold">$2.500</span>
-              <span class="text-xs text-brand-cream/40 border border-white/10 px-3 py-1 rounded-full">Pollo</span>
+              <button onclick="addToCart('rebel-crispy')"
+                class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">
+                + Agregar
+              </button>
             </div>
           </div>
         </div>
@@ -270,7 +325,10 @@
             </p>
             <div class="flex items-center justify-between">
               <span class="font-display text-3xl text-brand-gold">$3.200</span>
-              <span class="text-xs text-brand-red border border-brand-red/30 px-3 py-1 rounded-full">🔥 Edición limitada</span>
+              <button onclick="addToCart('black-metal')"
+                class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">
+                + Agregar
+              </button>
             </div>
           </div>
         </div>
@@ -451,6 +509,7 @@
   <!-- ═══════════════════════════════════════
        JS — Scroll animations + mobile menu
   ════════════════════════════════════════ -->
+  <script src="cart.js"></script>
   <script>
     // Reveal on scroll
     const observer = new IntersectionObserver((entries) => {
