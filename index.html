@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mezherBurgers — Smash. Craft. Rebel.</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              black:  '#0D0D0D',
+              gold:   '#E8B84B',
+              cream:  '#F5F0E8',
+              red:    '#C0392B',
+              gray:   '#1A1A1A',
+              muted:  '#6B6B6B',
+            }
+          },
+          fontFamily: {
+            display: ['Bebas Neue', 'sans-serif'],
+            body:    ['DM Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+
+    /* Fade-in on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Hero grain overlay */
+    .grain::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    /* Gold underline accent */
+    .gold-line {
+      position: relative;
+      display: inline-block;
+    }
+    .gold-line::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -4px;
+      width: 100%; height: 4px;
+      background: #E8B84B;
+    }
+
+    /* Card hover lift */
+    .burger-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .burger-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 48px rgba(232,184,75,0.15);
+    }
+  </style>
+</head>
+<body class="bg-brand-black text-brand-cream font-body antialiased">
+
+  <!-- ═══════════════════════════════════════
+       NAV
+  ════════════════════════════════════════ -->
+  <nav class="fixed top-0 w-full z-50 bg-brand-black/90 backdrop-blur-sm border-b border-white/5">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#" class="font-display text-2xl tracking-widest text-brand-gold">mezher<span class="text-brand-cream">BURGERS</span></a>
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium text-brand-cream/70">
+        <a href="#filosofia" class="hover:text-brand-gold transition-colors">Filosofía</a>
+        <a href="#menu" class="hover:text-brand-gold transition-colors">Menú</a>
+        <a href="#ubicacion" class="hover:text-brand-gold transition-colors">Ubicación</a>
+        <a href="#pedido" class="bg-brand-gold text-brand-black px-5 py-2 rounded-full font-semibold hover:bg-yellow-400 transition-colors">Hacer Pedido</a>
+      </div>
+      <!-- Mobile hamburger -->
+      <button id="menuBtn" class="md:hidden text-brand-cream focus:outline-none">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="hidden md:hidden bg-brand-gray px-6 pb-6 flex flex-col gap-5 text-sm font-medium">
+      <a href="#filosofia" class="hover:text-brand-gold transition-colors">Filosofía</a>
+      <a href="#menu" class="hover:text-brand-gold transition-colors">Menú</a>
+      <a href="#ubicacion" class="hover:text-brand-gold transition-colors">Ubicación</a>
+      <a href="#pedido" class="bg-brand-gold text-brand-black px-5 py-2 rounded-full font-semibold text-center hover:bg-yellow-400 transition-colors">Hacer Pedido</a>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════
+       HERO
+  ════════════════════════════════════════ -->
+  <section class="grain relative min-h-screen flex items-center justify-center overflow-hidden bg-brand-black">
+    <!-- Background image overlay -->
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1600&q=80')] bg-cover bg-center opacity-20"></div>
+    <!-- Gradient overlay -->
+    <div class="absolute inset-0 bg-gradient-to-b from-brand-black/60 via-transparent to-brand-black"></div>
+
+    <!-- Gold accent line left -->
+    <div class="absolute left-0 top-1/4 w-1 h-48 bg-brand-gold hidden lg:block"></div>
+
+    <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
+      <p class="text-brand-gold font-display tracking-[0.3em] text-sm mb-4">SMASH · CRAFT · REBEL</p>
+      <h1 class="font-display text-7xl md:text-9xl leading-none tracking-tight mb-6">
+        NO ES UNA<br/>
+        <span class="text-brand-gold">HAMBURGUESA.</span><br/>
+        ES UNA ACTITUD.
+      </h1>
+      <p class="text-brand-cream/70 text-lg md:text-xl max-w-xl mx-auto mb-10 leading-relaxed">
+        Carne smash de origen local, pan artesano horneado a diario y cervezas craft seleccionadas. Para quienes saben lo que quieren.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a id="pedido" href="https://wa.me/+5491100000000?text=Hola%2C%20quiero%20hacer%20un%20pedido" target="_blank"
+           class="bg-brand-gold text-brand-black font-semibold text-lg px-10 py-4 rounded-full hover:bg-yellow-400 transition-all hover:scale-105 inline-block">
+          Hacer mi Pedido →
+        </a>
+        <a href="#menu"
+           class="border border-brand-cream/30 text-brand-cream font-medium text-lg px-10 py-4 rounded-full hover:border-brand-gold hover:text-brand-gold transition-all inline-block">
+          Ver Menú
+        </a>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-brand-cream/40 text-xs tracking-widest">
+      <span>SCROLL</span>
+      <div class="w-px h-10 bg-brand-gold/50 animate-pulse"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       FILOSOFIA
+  ════════════════════════════════════════ -->
+  <section id="filosofia" class="py-28 px-6 bg-brand-gray">
+    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+
+      <!-- Text -->
+      <div class="reveal">
+        <p class="text-brand-gold font-display tracking-[0.25em] text-sm mb-4">NUESTRA FILOSOFÍA</p>
+        <h2 class="font-display text-5xl md:text-6xl leading-tight mb-8">
+          OBSESIONADOS<br/>CON <span class="gold-line">LA MATERIA</span><br/>PRIMA
+        </h2>
+        <div class="space-y-5 text-brand-cream/70 leading-relaxed">
+          <p>
+            Trabajamos con ganaderos locales que comparten nuestra obsesión por la calidad. Cada corte llega fresco, sin congelados, sin atajos. La mezcla perfecta de chuck y brisket — 80/20 — nos da la grasa justa para un smash con ese crust crujiente que se escucha desde la barra.
+          </p>
+          <p>
+            El pan no se compra: se hornea. Nuestro brioche artesano lleva 12 horas de fermentación lenta para lograr la miga perfecta que aguanta sin rendirse ante la carne y las salsas.
+          </p>
+          <p>
+            Sin intermediarios. Sin conservantes. Solo producto real, cocinado con fuego de verdad.
+          </p>
+        </div>
+        <div class="mt-10 flex gap-10">
+          <div>
+            <p class="font-display text-4xl text-brand-gold">100%</p>
+            <p class="text-sm text-brand-cream/50 mt-1">Carne local</p>
+          </div>
+          <div class="w-px bg-white/10"></div>
+          <div>
+            <p class="font-display text-4xl text-brand-gold">12h</p>
+            <p class="text-sm text-brand-cream/50 mt-1">Fermentación del pan</p>
+          </div>
+          <div class="w-px bg-white/10"></div>
+          <div>
+            <p class="font-display text-4xl text-brand-gold">0</p>
+            <p class="text-sm text-brand-cream/50 mt-1">Congelados</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image -->
+      <div class="reveal relative">
+        <div class="absolute -top-4 -left-4 w-full h-full border border-brand-gold/30 rounded-2xl"></div>
+        <img
+          src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=800&q=80"
+          alt="Proceso de elaboración mezherBurgers"
+          class="w-full h-96 md:h-[520px] object-cover rounded-2xl"
+        />
+        <div class="absolute bottom-6 left-6 bg-brand-black/80 backdrop-blur px-5 py-3 rounded-xl border border-brand-gold/20">
+          <p class="font-display text-brand-gold tracking-wider text-sm">SMASH FRESH DAILY</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       MENU DESTACADO
+  ════════════════════════════════════════ -->
+  <section id="menu" class="py-28 px-6 bg-brand-black">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <p class="text-brand-gold font-display tracking-[0.25em] text-sm mb-4">MENÚ DESTACADO</p>
+        <h2 class="font-display text-5xl md:text-6xl">LAS <span class="text-brand-gold">ESTRELLAS</span></h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+
+        <!-- Burger 1 — TOP VENTAS -->
+        <div class="burger-card reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-brand-gold/40">
+          <!-- Badge -->
+          <div class="absolute top-4 right-4 z-10 bg-brand-gold text-brand-black text-xs font-display tracking-widest px-3 py-1 rounded-full">
+            ★ TOP VENTAS
+          </div>
+          <div class="h-56 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=600&q=80"
+                 alt="The OG Smash"
+                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+          </div>
+          <div class="p-6">
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">THE OG SMASH</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5">
+              Doble smash 80/20, cheddar fundido, panceta crocante, cebolla, pickles, tomate, lechuga fresca y la inigualable salsa secreta mezher.
+            </p>
+            <div class="flex items-center justify-between">
+              <span class="font-display text-3xl text-brand-gold">$2.800</span>
+              <span class="text-xs text-brand-cream/40 border border-white/10 px-3 py-1 rounded-full">Simple $1.800</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Burger 2 -->
+        <div class="burger-card reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-white/5">
+          <div class="h-56 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80"
+                 alt="Rebel Crispy"
+                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+          </div>
+          <div class="p-6">
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">REBEL CRISPY</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5">
+              Pollo crispy marinado 24hs, coleslaw de lima, jalapeños frescos, mayo de chipotle y pan brioche tostado.
+            </p>
+            <div class="flex items-center justify-between">
+              <span class="font-display text-3xl text-brand-gold">$2.500</span>
+              <span class="text-xs text-brand-cream/40 border border-white/10 px-3 py-1 rounded-full">Pollo</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Burger 3 -->
+        <div class="burger-card reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-white/5">
+          <div class="h-56 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1607013251379-e6eecfffe234?w=600&q=80"
+                 alt="Black Metal"
+                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+          </div>
+          <div class="p-6">
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">BLACK METAL</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5">
+              Triple smash, bacon ahumado, queso azul, cebolla crispy, rúcula y mostaza de Dijon en pan negro al carbón.
+            </p>
+            <div class="flex items-center justify-between">
+              <span class="font-display text-3xl text-brand-gold">$3.200</span>
+              <span class="text-xs text-brand-red border border-brand-red/30 px-3 py-1 rounded-full">🔥 Edición limitada</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="text-center mt-12 reveal">
+        <a href="#pedido" class="inline-block border border-brand-gold text-brand-gold font-semibold px-10 py-4 rounded-full hover:bg-brand-gold hover:text-brand-black transition-all">
+          Ver Menú Completo →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       UBICACION Y HORARIOS
+  ════════════════════════════════════════ -->
+  <section id="ubicacion" class="py-28 px-6 bg-brand-gray">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <p class="text-brand-gold font-display tracking-[0.25em] text-sm mb-4">ENCONTRANOS</p>
+        <h2 class="font-display text-5xl md:text-6xl">UBICACIÓN &<br/><span class="text-brand-gold">HORARIOS</span></h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-12 items-start">
+
+        <!-- Info -->
+        <div class="reveal space-y-8">
+          <!-- Direccion -->
+          <div class="flex gap-5 items-start">
+            <div class="w-12 h-12 bg-brand-gold/10 border border-brand-gold/30 rounded-xl flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="font-display text-xl text-brand-gold tracking-wide mb-1">DIRECCIÓN</p>
+              <p class="text-brand-cream/70">Av. Corrientes 1234, Piso 1</p>
+              <p class="text-brand-cream/70">Buenos Aires, Argentina</p>
+            </div>
+          </div>
+
+          <!-- Horarios -->
+          <div class="flex gap-5 items-start">
+            <div class="w-12 h-12 bg-brand-gold/10 border border-brand-gold/30 rounded-xl flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="font-display text-xl text-brand-gold tracking-wide mb-2">HORARIOS</p>
+              <div class="space-y-1 text-brand-cream/70 text-sm">
+                <div class="flex justify-between gap-12">
+                  <span>Lunes – Jueves</span>
+                  <span class="text-brand-cream">12:00 – 23:00</span>
+                </div>
+                <div class="flex justify-between gap-12">
+                  <span>Viernes – Sábado</span>
+                  <span class="text-brand-cream">12:00 – 01:00</span>
+                </div>
+                <div class="flex justify-between gap-12">
+                  <span>Domingo</span>
+                  <span class="text-brand-cream">13:00 – 22:00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Telefono -->
+          <div class="flex gap-5 items-start">
+            <div class="w-12 h-12 bg-brand-gold/10 border border-brand-gold/30 rounded-xl flex items-center justify-center shrink-0">
+              <svg class="w-5 h-5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.948V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 7V5z"/>
+              </svg>
+            </div>
+            <div>
+              <p class="font-display text-xl text-brand-gold tracking-wide mb-1">CONTACTO</p>
+              <a href="tel:+5491100000000" class="text-brand-cream/70 hover:text-brand-gold transition-colors">+54 9 11 0000-0000</a>
+              <br/>
+              <a href="mailto:hola@mezherburgers.com" class="text-brand-cream/70 hover:text-brand-gold transition-colors text-sm">hola@mezherburgers.com</a>
+            </div>
+          </div>
+
+          <!-- CTA WhatsApp -->
+          <a href="https://wa.me/+5491100000000?text=Hola%2C%20quiero%20hacer%20un%20pedido" target="_blank"
+             class="inline-flex items-center gap-3 bg-[#25D366] text-white font-semibold px-8 py-4 rounded-full hover:bg-[#1ebe5d] transition-all hover:scale-105">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            Pedir por WhatsApp
+          </a>
+        </div>
+
+        <!-- Map placeholder -->
+        <div class="reveal rounded-2xl overflow-hidden h-80 md:h-full min-h-72 border border-white/10">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3284.016990267659!2d-58.38415682346767!3d-34.603844572951795!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bccacf42ae0a69%3A0xa33dee4ca3c2c430!2sAv.%20Corrientes%201234%2C%20Buenos%20Aires!5e0!3m2!1ses!2sar!4v1714000000000"
+            width="100%"
+            height="100%"
+            style="border:0; filter: grayscale(100%) invert(90%) contrast(90%);"
+            allowfullscreen=""
+            loading="lazy">
+          </iframe>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════ -->
+  <footer class="bg-brand-black border-t border-white/5 py-14 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-start gap-10 mb-12">
+
+        <!-- Brand -->
+        <div class="max-w-xs">
+          <p class="font-display text-3xl tracking-widest text-brand-gold mb-3">mezher<span class="text-brand-cream">BURGERS</span></p>
+          <p class="text-brand-cream/40 text-sm leading-relaxed">Smash burgers de autor. Carne local, pan artesano, cervezas craft. Buenos Aires, Argentina.</p>
+        </div>
+
+        <!-- Links -->
+        <div class="grid grid-cols-2 gap-10 text-sm">
+          <div>
+            <p class="font-display tracking-widest text-brand-gold text-xs mb-4">MENÚ</p>
+            <ul class="space-y-2 text-brand-cream/50">
+              <li><a href="#" class="hover:text-brand-gold transition-colors">Smash Burgers</a></li>
+              <li><a href="#" class="hover:text-brand-gold transition-colors">Chicken</a></li>
+              <li><a href="#" class="hover:text-brand-gold transition-colors">Sides</a></li>
+              <li><a href="#" class="hover:text-brand-gold transition-colors">Cervezas Craft</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="font-display tracking-widest text-brand-gold text-xs mb-4">LEGAL</p>
+            <ul class="space-y-2 text-brand-cream/50">
+              <li><a href="#" class="hover:text-brand-gold transition-colors">Términos y Condiciones</a></li>
+              <li><a href="#" class="hover:text-brand-gold transition-colors">Política de Privacidad</a></li>
+              <li><a href="#" class="hover:text-brand-gold transition-colors">Alergenos</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Social -->
+        <div>
+          <p class="font-display tracking-widest text-brand-gold text-xs mb-4">SEGUINOS</p>
+          <div class="flex gap-4">
+            <!-- Instagram -->
+            <a href="https://instagram.com/mezherburgers" target="_blank"
+               class="w-10 h-10 border border-white/10 rounded-xl flex items-center justify-center text-brand-cream/50 hover:border-brand-gold hover:text-brand-gold transition-all">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+            </a>
+            <!-- TikTok -->
+            <a href="https://tiktok.com/@mezherburgers" target="_blank"
+               class="w-10 h-10 border border-white/10 rounded-xl flex items-center justify-center text-brand-cream/50 hover:border-brand-gold hover:text-brand-gold transition-all">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.17 8.17 0 004.79 1.54V6.78a4.85 4.85 0 01-1.02-.09z"/>
+              </svg>
+            </a>
+            <!-- Facebook -->
+            <a href="https://facebook.com/mezherburgers" target="_blank"
+               class="w-10 h-10 border border-white/10 rounded-xl flex items-center justify-center text-brand-cream/50 hover:border-brand-gold hover:text-brand-gold transition-all">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-brand-cream/30">
+        <p>© 2026 mezherBurgers. Todos los derechos reservados.</p>
+        <p>Hecho con 🔥 en Buenos Aires</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════
+       JS — Scroll animations + mobile menu
+  ════════════════════════════════════════ -->
+  <script>
+    // Reveal on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Mobile menu toggle
+    document.getElementById('menuBtn').addEventListener('click', () => {
+      document.getElementById('mobileMenu').classList.toggle('hidden');
+    });
+
+    // Close mobile menu on link click
+    document.querySelectorAll('#mobileMenu a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.add('hidden');
+      });
+    });
+  </script>
+</body>
+</html>
