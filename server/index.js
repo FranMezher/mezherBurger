@@ -7,7 +7,7 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json());
-app.use(cors({ origin: process.env.FRONTEND_URL || '*' }));
+app.use(cors({ origin: '*' }));
 
 // MercadoPago client — se configura cuando tengamos el token real
 const client = new MercadoPagoConfig({
