@@ -1,3 +1,8 @@
+// ─── URL del backend (auto-detecta local vs producción) ────
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3000'  // Desarrollo local
+  : '';                       // Vercel: rutas relativas /api/...
+
 // ─── Menú completo ─────────────────────────────────────────
 const MENU = {
   // Burgers (incluyen papas fritas)
@@ -175,7 +180,7 @@ async function submitOrder(e) {
   btn.textContent = 'Procesando...';
 
   try {
-    const res = await fetch('http://localhost:3000/create-preference', {
+    const res = await fetch(`${API_URL}/api/create-preference`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
