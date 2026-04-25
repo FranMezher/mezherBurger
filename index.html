@@ -4,6 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>mezherBurgers — Smash. Craft. Rebel.</title>
+  <!-- Google Analytics GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -78,6 +86,52 @@
 <body class="bg-brand-black text-brand-cream font-body antialiased">
 
   <!-- ═══════════════════════════════════════
+       MODAL DATOS DEL PEDIDO
+  ════════════════════════════════════════ -->
+  <div id="order-modal" class="hidden fixed inset-0 z-[60] items-center justify-center bg-black/70 backdrop-blur-sm px-4">
+    <div class="bg-brand-gray w-full max-w-md rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
+      <div class="flex items-center justify-between px-6 py-5 border-b border-white/10">
+        <div>
+          <p class="font-display text-2xl tracking-widest text-brand-gold">TUS DATOS</p>
+          <p class="text-brand-cream/40 text-xs mt-0.5">Para entregar tu pedido</p>
+        </div>
+        <button onclick="closeOrderForm()" class="text-brand-cream/40 hover:text-brand-cream transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <form id="order-form" onsubmit="submitOrder(event)" class="px-6 py-6 space-y-4">
+        <div>
+          <label class="text-brand-cream/60 text-xs font-medium tracking-wider uppercase mb-1.5 block">Nombre completo *</label>
+          <input id="order-name" type="text" required placeholder="Ej: Juan Pérez"
+            class="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-brand-cream placeholder-brand-cream/20 focus:outline-none focus:border-brand-gold transition-colors"/>
+        </div>
+        <div>
+          <label class="text-brand-cream/60 text-xs font-medium tracking-wider uppercase mb-1.5 block">Teléfono *</label>
+          <input id="order-phone" type="tel" required placeholder="Ej: 11 6617-9112"
+            class="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-brand-cream placeholder-brand-cream/20 focus:outline-none focus:border-brand-gold transition-colors"/>
+        </div>
+        <div>
+          <label class="text-brand-cream/60 text-xs font-medium tracking-wider uppercase mb-1.5 block">Dirección de entrega *</label>
+          <input id="order-address" type="text" required placeholder="Calle, número, piso/depto"
+            class="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-brand-cream placeholder-brand-cream/20 focus:outline-none focus:border-brand-gold transition-colors"/>
+        </div>
+        <div>
+          <label class="text-brand-cream/60 text-xs font-medium tracking-wider uppercase mb-1.5 block">Notas del pedido</label>
+          <textarea id="order-notes" rows="2" placeholder="Sin pickles, extra salsa, etc."
+            class="w-full bg-brand-black border border-white/10 rounded-xl px-4 py-3 text-brand-cream placeholder-brand-cream/20 focus:outline-none focus:border-brand-gold transition-colors resize-none"></textarea>
+        </div>
+        <button id="order-submit-btn" type="submit"
+          class="w-full bg-brand-gold text-brand-black font-semibold text-lg py-4 rounded-full hover:bg-yellow-400 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed mt-2">
+          Ir a pagar →
+        </button>
+        <p class="text-brand-cream/30 text-xs text-center">Serás redirigido a MercadoPago</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
        CART OVERLAY + DRAWER
   ════════════════════════════════════════ -->
   <div id="cart-overlay" onclick="closeCart()"
@@ -111,7 +165,7 @@
         <span class="text-brand-cream/60 font-medium">Total</span>
         <span id="cart-total" class="font-display text-3xl text-brand-gold">$0</span>
       </div>
-      <button id="checkout-btn" onclick="checkout()"
+      <button id="checkout-btn" onclick="openOrderForm()"
         class="w-full bg-brand-gold text-brand-black font-semibold text-lg py-4 rounded-full hover:bg-yellow-400 transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
         Pagar ahora →
       </button>
@@ -261,84 +315,220 @@
         <h2 class="font-display text-5xl md:text-6xl">LAS <span class="text-brand-gold">ESTRELLAS</span></h2>
       </div>
 
-      <div class="grid md:grid-cols-3 gap-8">
-
-        <!-- Burger 1 — TOP VENTAS -->
-        <div class="burger-card reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-brand-gold/40">
-          <!-- Badge -->
-          <div class="absolute top-4 right-4 z-10 bg-brand-gold text-brand-black text-xs font-display tracking-widest px-3 py-1 rounded-full">
-            ★ TOP VENTAS
-          </div>
-          <div class="h-56 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=600&q=80"
-                 alt="The OG Smash"
-                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-          </div>
-          <div class="p-6">
-            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">THE OG SMASH</h3>
-            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5">
-              Doble smash 80/20, cheddar fundido, panceta crocante, cebolla, pickles, tomate, lechuga fresca y la inigualable salsa secreta mezher.
-            </p>
-            <div class="flex items-center justify-between">
-              <span class="font-display text-3xl text-brand-gold">$2.800</span>
-              <button onclick="addToCart('og-smash')"
-                class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">
-                + Agregar
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Burger 2 -->
-        <div class="burger-card reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-white/5">
-          <div class="h-56 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80"
-                 alt="Rebel Crispy"
-                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-          </div>
-          <div class="p-6">
-            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">REBEL CRISPY</h3>
-            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5">
-              Pollo crispy marinado 24hs, coleslaw de lima, jalapeños frescos, mayo de chipotle y pan brioche tostado.
-            </p>
-            <div class="flex items-center justify-between">
-              <span class="font-display text-3xl text-brand-gold">$2.500</span>
-              <button onclick="addToCart('rebel-crispy')"
-                class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">
-                + Agregar
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Burger 3 -->
-        <div class="burger-card reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-white/5">
-          <div class="h-56 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1607013251379-e6eecfffe234?w=600&q=80"
-                 alt="Black Metal"
-                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-          </div>
-          <div class="p-6">
-            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">BLACK METAL</h3>
-            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5">
-              Triple smash, bacon ahumado, queso azul, cebolla crispy, rúcula y mostaza de Dijon en pan negro al carbón.
-            </p>
-            <div class="flex items-center justify-between">
-              <span class="font-display text-3xl text-brand-gold">$3.200</span>
-              <button onclick="addToCart('black-metal')"
-                class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">
-                + Agregar
-              </button>
-            </div>
-          </div>
-        </div>
-
+      <!-- Tabs de categoría -->
+      <div class="flex flex-wrap justify-center gap-3 mb-10 reveal">
+        <button onclick="filterMenu('burger')" id="tab-burger" class="menu-tab active-tab font-display tracking-widest text-sm px-6 py-2 rounded-full border border-brand-gold bg-brand-gold text-brand-black transition-all">🍔 Burgers</button>
+        <button onclick="filterMenu('combo')"  id="tab-combo"  class="menu-tab font-display tracking-widest text-sm px-6 py-2 rounded-full border border-white/20 text-brand-cream/60 hover:border-brand-gold hover:text-brand-gold transition-all">⚡ Combos</button>
+        <button onclick="filterMenu('side')"   id="tab-side"   class="menu-tab font-display tracking-widest text-sm px-6 py-2 rounded-full border border-white/20 text-brand-cream/60 hover:border-brand-gold hover:text-brand-gold transition-all">🍟 Sides</button>
+        <button onclick="filterMenu('drink')"  id="tab-drink"  class="menu-tab font-display tracking-widest text-sm px-6 py-2 rounded-full border border-white/20 text-brand-cream/60 hover:border-brand-gold hover:text-brand-gold transition-all">🍺 Bebidas</button>
       </div>
 
-      <div class="text-center mt-12 reveal">
-        <a href="#pedido" class="inline-block border border-brand-gold text-brand-gold font-semibold px-10 py-4 rounded-full hover:bg-brand-gold hover:text-brand-black transition-all">
-          Ver Menú Completo →
-        </a>
+      <!-- Grid de items -->
+      <div id="menu-grid" class="grid md:grid-cols-3 gap-8">
+
+        <!-- BURGERS -->
+        <div data-category="burger" class="burger-card menu-item reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-brand-gold/40">
+          <div class="absolute top-4 right-4 z-10 bg-brand-gold text-brand-black text-xs font-display tracking-widest px-3 py-1 rounded-full">★ TOP VENTAS</div>
+          <div class="h-52 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=600&q=80" alt="The OG Smash" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"/>
+          </div>
+          <div class="p-6">
+            <p class="text-brand-gold/60 text-xs font-display tracking-widest mb-1">INCLUYE PAPAS</p>
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">THE OG SMASH</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5">Doble smash 80/20, cheddar fundido, panceta crocante, cebolla, pickles, tomate, lechuga y salsa mezher.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-display text-3xl text-brand-gold">$2.800</span>
+              <button onclick="addToCart('og-smash')" class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <div data-category="burger" class="burger-card menu-item reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-white/5">
+          <div class="h-52 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80" alt="Rebel Crispy" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"/>
+          </div>
+          <div class="p-6">
+            <p class="text-brand-gold/60 text-xs font-display tracking-widest mb-1">INCLUYE PAPAS</p>
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">REBEL CRISPY</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5">Pollo crispy marinado 24hs, coleslaw de lima, jalapeños, mayo de chipotle y pan brioche tostado.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-display text-3xl text-brand-gold">$2.500</span>
+              <button onclick="addToCart('rebel-crispy')" class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <div data-category="burger" class="burger-card menu-item reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-white/5">
+          <div class="h-52 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1607013251379-e6eecfffe234?w=600&q=80" alt="Black Metal" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"/>
+          </div>
+          <div class="p-6">
+            <p class="text-brand-gold/60 text-xs font-display tracking-widest mb-1">INCLUYE PAPAS</p>
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">BLACK METAL</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5">Triple smash, bacon ahumado, queso azul, cebolla crispy, rúcula y mostaza Dijon en pan negro al carbón.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-display text-3xl text-brand-gold">$3.200</span>
+              <button onclick="addToCart('black-metal')" class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <div data-category="burger" class="burger-card menu-item reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-white/5">
+          <div class="h-52 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=600&q=80" alt="Smokey Joe" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"/>
+          </div>
+          <div class="p-6">
+            <p class="text-brand-gold/60 text-xs font-display tracking-widest mb-1">INCLUYE PAPAS</p>
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">SMOKEY JOE</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5">Doble smash, cheddar ahumado, bacon BBQ, cebolla caramelizada y mayo de ajo negro.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-display text-3xl text-brand-gold">$2.900</span>
+              <button onclick="addToCart('smokey-joe')" class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <div data-category="burger" class="burger-card menu-item reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-white/5">
+          <div class="h-52 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1520072959219-c595dc870360?w=600&q=80" alt="Mezher Veggie" class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"/>
+          </div>
+          <div class="p-6">
+            <p class="text-brand-gold/60 text-xs font-display tracking-widest mb-1">VEGGIE · INCLUYE PAPAS</p>
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">MEZHER VEGGIE</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5">Burger de garbanzos y remolacha, queso brie, rúcula, tomate seco y alioli de limón.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-display text-3xl text-brand-gold">$2.400</span>
+              <button onclick="addToCart('mezher-veggie')" class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMBOS -->
+        <div data-category="combo" class="burger-card menu-item hidden reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-brand-gold/20">
+          <div class="p-6 flex flex-col h-full">
+            <div class="text-4xl mb-3">⚡</div>
+            <p class="text-brand-gold/60 text-xs font-display tracking-widest mb-1">COMBO</p>
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">COMBO OG</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5 flex-1">THE OG SMASH + Papas fritas + Bebida a elección. El combo más pedido.</p>
+            <div class="flex items-center justify-between">
+              <div><span class="font-display text-3xl text-brand-gold">$3.200</span><p class="text-brand-cream/30 text-xs line-through">$4.100</p></div>
+              <button onclick="addToCart('combo-og')" class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <div data-category="combo" class="burger-card menu-item hidden reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-brand-gold/20">
+          <div class="p-6 flex flex-col h-full">
+            <div class="text-4xl mb-3">⚡</div>
+            <p class="text-brand-gold/60 text-xs font-display tracking-widest mb-1">COMBO</p>
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">COMBO REBEL</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5 flex-1">REBEL CRISPY + Papas fritas + Bebida a elección.</p>
+            <div class="flex items-center justify-between">
+              <div><span class="font-display text-3xl text-brand-gold">$2.900</span><p class="text-brand-cream/30 text-xs line-through">$3.700</p></div>
+              <button onclick="addToCart('combo-rebel')" class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <div data-category="combo" class="burger-card menu-item hidden reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-brand-gold/20">
+          <div class="p-6 flex flex-col h-full">
+            <div class="text-4xl mb-3">⚡</div>
+            <p class="text-brand-gold/60 text-xs font-display tracking-widest mb-1">COMBO</p>
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">COMBO METAL</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5 flex-1">BLACK METAL + Papas fritas + Bebida a elección. Para los valientes.</p>
+            <div class="flex items-center justify-between">
+              <div><span class="font-display text-3xl text-brand-gold">$3.600</span><p class="text-brand-cream/30 text-xs line-through">$5.100</p></div>
+              <button onclick="addToCart('combo-metal')" class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SIDES -->
+        <div data-category="side" class="burger-card menu-item hidden reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-white/5">
+          <div class="p-6 flex flex-col h-full">
+            <div class="text-4xl mb-3">🍟</div>
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">PAPAS FRITAS</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5 flex-1">Papas crocantes con sal gruesa. Clásico que nunca falla.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-display text-3xl text-brand-gold">$800</span>
+              <button onclick="addToCart('papas-simples')" class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <div data-category="side" class="burger-card menu-item hidden reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-white/5">
+          <div class="p-6 flex flex-col h-full">
+            <div class="text-4xl mb-3">🧀</div>
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">PAPAS CHEDDAR</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5 flex-1">Papas fritas bañadas en salsa cheddar fundido y bacon crocante.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-display text-3xl text-brand-gold">$1.100</span>
+              <button onclick="addToCart('papas-cheddar')" class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <div data-category="side" class="burger-card menu-item hidden reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-white/5">
+          <div class="p-6 flex flex-col h-full">
+            <div class="text-4xl mb-3">🧅</div>
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">ONION RINGS</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5 flex-1">Aros de cebolla rebozados con panko japonés. Con salsa BBQ.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-display text-3xl text-brand-gold">$950</span>
+              <button onclick="addToCart('onion-rings')" class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BEBIDAS -->
+        <div data-category="drink" class="burger-card menu-item hidden reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-white/5">
+          <div class="p-6 flex flex-col h-full">
+            <div class="text-4xl mb-3">🍺</div>
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">CERVEZA IPA</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5 flex-1">Craft IPA 473ml — Basta Brewing. Amarga, floral y perfecta con smash.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-display text-3xl text-brand-gold">$1.200</span>
+              <button onclick="addToCart('cerveza-ipa')" class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <div data-category="drink" class="burger-card menu-item hidden reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-white/5">
+          <div class="p-6 flex flex-col h-full">
+            <div class="text-4xl mb-3">🍺</div>
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">CERVEZA STOUT</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5 flex-1">Craft Stout 473ml — Basta Brewing. Oscura, con notas a café y chocolate.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-display text-3xl text-brand-gold">$1.200</span>
+              <button onclick="addToCart('cerveza-stout')" class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <div data-category="drink" class="burger-card menu-item hidden reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-white/5">
+          <div class="p-6 flex flex-col h-full">
+            <div class="text-4xl mb-3">🍋</div>
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">LIMONADA MEZHER</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5 flex-1">Limonada exprimida al momento con menta fresca y jengibre.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-display text-3xl text-brand-gold">$700</span>
+              <button onclick="addToCart('limonada')" class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
+        <div data-category="drink" class="burger-card menu-item hidden reveal relative bg-brand-gray rounded-2xl overflow-hidden border border-white/5">
+          <div class="p-6 flex flex-col h-full">
+            <div class="text-4xl mb-3">🥤</div>
+            <h3 class="font-display text-3xl text-brand-cream tracking-wide mb-2">COCA-COLA</h3>
+            <p class="text-brand-cream/60 text-sm leading-relaxed mb-5 flex-1">Lata 354ml bien fría.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-display text-3xl text-brand-gold">$600</span>
+              <button onclick="addToCart('coca-cola')" class="bg-brand-gold text-brand-black text-sm font-semibold px-4 py-2 rounded-full hover:bg-yellow-400 transition-all hover:scale-105">+ Agregar</button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -436,6 +626,57 @@
   </section>
 
   <!-- ═══════════════════════════════════════
+       RESEÑAS
+  ════════════════════════════════════════ -->
+  <section class="py-28 px-6 bg-brand-black">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <p class="text-brand-gold font-display tracking-[0.25em] text-sm mb-4">LO QUE DICEN</p>
+        <h2 class="font-display text-5xl md:text-6xl">LA GENTE <span class="text-brand-gold">HABLA</span></h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+
+        <div class="reveal bg-brand-gray rounded-2xl p-8 border border-white/5 relative">
+          <div class="text-brand-gold text-4xl font-display mb-4">"</div>
+          <p class="text-brand-cream/70 leading-relaxed mb-6">La mejor smash que probé en Buenos Aires. Ese crust... se escucha desde que la ponen en la plancha. Un nivel.</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-brand-gold/20 rounded-full flex items-center justify-center font-display text-brand-gold">M</div>
+            <div>
+              <p class="text-brand-cream font-semibold text-sm">Matías R.</p>
+              <p class="text-brand-cream/30 text-xs">⭐⭐⭐⭐⭐ Google</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal bg-brand-gray rounded-2xl p-8 border border-brand-gold/20 relative">
+          <div class="text-brand-gold text-4xl font-display mb-4">"</div>
+          <p class="text-brand-cream/70 leading-relaxed mb-6">El pan artesano es una locura. Se nota que lo hacen ellos. Pedí el OG Smash doble y no me arrepiento para nada.</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-brand-gold/20 rounded-full flex items-center justify-center font-display text-brand-gold">S</div>
+            <div>
+              <p class="text-brand-cream font-semibold text-sm">Sol G.</p>
+              <p class="text-brand-cream/30 text-xs">⭐⭐⭐⭐⭐ Instagram</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal bg-brand-gray rounded-2xl p-8 border border-white/5 relative">
+          <div class="text-brand-gold text-4xl font-display mb-4">"</div>
+          <p class="text-brand-cream/70 leading-relaxed mb-6">La IPA con la Black Metal es el mejor maridaje que encontré. Sitio con onda, atención rápida. Volvería mil veces.</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-brand-gold/20 rounded-full flex items-center justify-center font-display text-brand-gold">F</div>
+            <div>
+              <p class="text-brand-cream font-semibold text-sm">Federico L.</p>
+              <p class="text-brand-cream/30 text-xs">⭐⭐⭐⭐⭐ Google</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
        FOOTER
   ════════════════════════════════════════ -->
   <footer class="bg-brand-black border-t border-white/5 py-14 px-6">
@@ -511,6 +752,21 @@
   ════════════════════════════════════════ -->
   <script src="cart.js"></script>
   <script>
+    // ─── Filtro de menú por tabs ───────────────────────────
+    function filterMenu(category) {
+      document.querySelectorAll('.menu-item').forEach(el => {
+        if (el.dataset.category === category) el.classList.remove('hidden');
+        else el.classList.add('hidden');
+      });
+      document.querySelectorAll('.menu-tab').forEach(btn => {
+        btn.classList.remove('bg-brand-gold', 'text-brand-black', 'border-brand-gold');
+        btn.classList.add('border-white/20', 'text-brand-cream/60');
+      });
+      const activeTab = document.getElementById(`tab-${category}`);
+      activeTab.classList.add('bg-brand-gold', 'text-brand-black', 'border-brand-gold');
+      activeTab.classList.remove('border-white/20', 'text-brand-cream/60');
+    }
+
     // Reveal on scroll
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => {
